@@ -44,7 +44,12 @@
     var group = 'g' + Date.now() + Math.random().toString(36).slice(2, 5);
     var wrap = document.createElement('div');
     wrap.innerHTML = html;
-    Array.prototype.forEach.call(wrap.children, function (n) { n.dataset.group = group; document.body.appendChild(n); });
+    // 注意：wrap.children 是活性 HTMLCollection，节点被 append 到 body 后会实时移出集合，
+    // 直接 forEach 会漏掉后续节点（表单层消失只剩遮罩）。必须先快照成静态数组。
+    Array.prototype.slice.call(wrap.children).forEach(function (n) {
+      n.dataset.group = group;
+      document.body.appendChild(n);
+    });
     var root = document.querySelector('.sheet[data-group="' + group + '"], .dialog[data-group="' + group + '"]');
     if (onMount) onMount(root, group);
   }
