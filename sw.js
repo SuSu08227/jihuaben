@@ -3,7 +3,7 @@
  * 作用：装到手机主屏后，没网也能打开（数据本来就在本地）。
  * 注意：file:// 打开时不生效，需通过 http(s) 访问。
  */
-var CACHE = 'daily-keeper-v4';
+var CACHE = 'daily-keeper-v5';
 
 var ASSETS = [
   './',
