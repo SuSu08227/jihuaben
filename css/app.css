@@ -422,13 +422,18 @@ button { font-family: inherit; font-size: inherit; border: none; background: non
   margin-bottom: 12px;
 }
 .hb-label { font-size: 12px; opacity: 0.7; }
+.hb-duo { display: flex; margin: 8px 0 18px; }
+.hb-duo > div { flex: 1; }
+.hb-sub { display: block; font-size: 11px; opacity: 0.62; margin-bottom: 4px; }
 .hb-num {
-  font-size: 34px;
+  font-size: 30px;
   font-weight: 700;
-  margin: 6px 0 18px;
   letter-spacing: 0.5px;
   font-variant-numeric: tabular-nums;
+  display: block;
 }
+.hb-remain { color: #9fe0b8; }
+.hb-remain.neg { color: #ff8b8b; }
 .hb-row { display: flex; }
 .hb-row > div { flex: 1; }
 .hb-row b { display: block; font-size: 13px; font-weight: 500; font-variant-numeric: tabular-nums; }
