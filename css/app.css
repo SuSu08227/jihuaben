@@ -179,6 +179,25 @@ button { font-family: inherit; font-size: inherit; border: none; background: non
   font-size: 14px;
   margin-left: 10px;
 }
+.btn-x.btn-edit {
+  background: var(--primary-soft);
+  color: #079f52;
+  font-size: 12px;
+  font-weight: 600;
+}
+.sav-total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 4px 0 12px;
+}
+.sav-label { font-size: 12px; opacity: 0.62; }
+.sav-total b {
+  font-size: 26px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.5px;
+}
 .pill {
   padding: 5px 12px;
   border-radius: 99px;
