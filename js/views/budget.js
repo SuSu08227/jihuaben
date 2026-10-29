@@ -39,12 +39,16 @@
     /* 汇总 */
     html += '<section class="hero-bud">' +
       '<div class="hb-label">本月可支配</div>' +
-      '<div class="hb-num">¥' + calc.fmtMoney(sum.disposable) + '</div>' +
+      '<div class="hb-duo">' +
+        '<div><span class="hb-sub">可支配总额</span>' +
+          '<b class="hb-num">¥' + calc.fmtMoney(sum.disposable) + '</b></div>' +
+        '<div><span class="hb-sub">剩余可支配</span>' +
+          '<b class="hb-num hb-remain' + (sum.negative ? ' neg' : '') + '">¥' + calc.fmtMoney(sum.remain) + '</b></div>' +
+      '</div>' +
       '<div class="hb-row">' +
         '<div><b>¥' + calc.fmtMoney(sum.income) + '</b><span>总收入</span></div>' +
         '<div><b>¥' + calc.fmtMoney(sum.fixedTotal) + '</b><span>固定支出</span></div>' +
         '<div><b>¥' + calc.fmtMoney(sum.spent) + '</b><span>已消费</span></div>' +
-        '<div><b class="' + (sum.negative ? 'neg' : '') + '">¥' + calc.fmtMoney(sum.remain) + '</b><span>剩余</span></div>' +
       '</div>' +
       '<div class="bar bar-light mt16"><i style="width:' + sum.spentPercent + '%"></i></div>' +
       '<div class="hb-tip">已消费占可支配 ' + sum.spentPercent + '%' +
