@@ -49,6 +49,7 @@
         '<div><b>¥' + calc.fmtMoney(sum.income) + '</b><span>总收入</span></div>' +
         '<div><b>¥' + calc.fmtMoney(sum.fixedTotal) + '</b><span>固定支出</span></div>' +
         '<div><b>¥' + calc.fmtMoney(sum.spent) + '</b><span>已消费</span></div>' +
+        '<div><b>¥' + calc.fmtMoney(sum.saved) + '</b><span>已存</span></div>' +
       '</div>' +
       '<div class="bar bar-light mt16"><i style="width:' + sum.spentPercent + '%"></i></div>' +
       '<div class="hb-tip">已消费占可支配 ' + sum.spentPercent + '%' +
@@ -72,6 +73,22 @@
       });
     }
     html += '<button class="btn btn-ghost btn-block mt12" data-act="addFixed">＋ 添加固定支出</button>' +
+    '</section>';
+
+    /* 存款 */
+    var totalSaved = store.totalSavings();
+    html += '<section class="card">' +
+      '<header class="card-head"><h2>存款</h2><span class="t-hint">累计 ¥' + calc.fmtMoney(totalSaved) + '</span></header>' +
+      '<div class="sav-total"><span class="sav-label">存款总金额</span>' +
+        '<b>¥' + calc.fmtMoney(totalSaved) + '</b></div>' +
+      '<div class="row-line" data-act="editSavingFixed"><span>本月固定存款</span>' +
+        '<span class="row-right"><b>¥' + calc.fmtMoney(sum.savingFixed) + '</b><span class="btn-x btn-edit">改</span></span></div>' +
+      '<div class="row-line" data-act="editSavingExtra"><span>本月结余转存</span>' +
+        '<span class="row-right"><b>¥' + calc.fmtMoney(sum.savingExtra) + '</b><span class="btn-x btn-edit">改</span></span></div>' +
+      '<div class="divider"></div>' +
+      '<div class="row-line"><span>本月存款合计</span><b class="t-safe">+¥' + calc.fmtMoney(sum.saved) + '</b></div>' +
+      '<div class="row-line"><span>结余留作下月花销</span><b class="' + (sum.negative ? 't-danger' : '') + '">¥' + calc.fmtMoney(sum.remain) + '</b></div>' +
+      '<div class="empty" style="margin-top:8px">剩余可支配已扣除存款；存款请从上方固定支出中移出</div>' +
     '</section>';
 
     /* 分类预算 */
@@ -174,6 +191,36 @@
         onOk: function () {
           budget.fixed = budget.fixed.filter(function (f) { return f.id !== ds.id; });
           saveAndRefresh(mk, budget, '已删除');
+        }
+      });
+    },
+
+    editSavingFixed: function () {
+      var mk = currentMonth();
+      var budget = store.getBudget(mk);
+      DK.ui.form({
+        title: '本月固定存款',
+        desc: '每月固定存入的金额（独立于固定支出）',
+        fields: [{ key: 'amt', label: '每月固定存款（元）', type: 'number', value: budget.savingFixed || '', placeholder: '如 1000', required: true }],
+        onSubmit: function (v) {
+          budget.savingFixed = Number(v.amt) || 0;
+          saveAndRefresh(mk, budget, '已保存');
+        }
+      });
+    },
+
+    editSavingExtra: function () {
+      var mk = currentMonth();
+      var budget = store.getBudget(mk);
+      DK.ui.form({
+        title: '本月结余转存',
+        desc: '把本月结余的一部分转成存款',
+        fields: [{ key: 'amt', label: '结余转存金额（元）', type: 'number', value: budget.savingExtra || '', placeholder: '如 500', required: true }],
+        onSubmit: function (v) {
+          var n = Number(v.amt) || 0;
+          if (n < 0) { DK.ui.toast('金额不能为负'); return false; }
+          budget.savingExtra = n;
+          saveAndRefresh(mk, budget, '已保存');
         }
       });
     },
