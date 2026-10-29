@@ -112,6 +112,8 @@
     return {
       income: 0,
       fixed: [],
+      savingFixed: 0,   // 每月固定存款（独立于固定支出）
+      savingExtra: 0,   // 本月结余转存
       categories: DEFAULT_CATEGORIES.map(function (c) { return { id: c.id, name: c.name, budget: 0 }; }),
       records: []
     };
@@ -123,12 +125,25 @@
     return {
       income: Number(data.income) || 0,
       fixed: data.fixed || [],
+      savingFixed: Number(data.savingFixed) || 0,
+      savingExtra: Number(data.savingExtra) || 0,
       categories: (data.categories && data.categories.length) ? data.categories : emptyBudget().categories,
       records: data.records || []
     };
   }
 
   function saveBudget(monthKey, budget) { write('budget:' + monthKey, budget); }
+
+  /** 存款总金额：跨所有月份分片累计（固定存款 + 结余转存） */
+  function totalSavings() {
+    var n = 0;
+    allKeys().forEach(function (k) {
+      if (k.indexOf('budget:') !== 0) return;
+      var d = read(k, null);
+      if (d) n += (Number(d.savingFixed) || 0) + (Number(d.savingExtra) || 0);
+    });
+    return n;
+  }
 
   /* ---------- 当天标记 ---------- */
   function getFlag(key) {
@@ -217,6 +232,7 @@
     emptyBudget: emptyBudget,
     getBudget: getBudget,
     saveBudget: saveBudget,
+    totalSavings: totalSavings,
     getFlag: getFlag,
     setFlag: setFlag,
     cleanFlags: cleanFlags,
