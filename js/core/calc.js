@@ -109,11 +109,19 @@
       return !monthKey || String(r.date || '').slice(0, 7) === monthKey;
     }).reduce(function (s, r) { return s + (Number(r.amount) || 0); }, 0);
 
-    var remain = disposable - spent;
+    // 存款独立于固定支出：固定存款 + 结余转存；剩余可支配要再扣掉本月存款
+    var savingFixed = Number(budget.savingFixed) || 0;
+    var savingExtra = Number(budget.savingExtra) || 0;
+    var saved = savingFixed + savingExtra;
+
+    var remain = disposable - spent - saved;
     return {
       income: income,
       fixedTotal: fixedTotal,
       disposable: disposable,
+      savingFixed: savingFixed,
+      savingExtra: savingExtra,
+      saved: saved,
       allocated: allocated,
       unallocated: disposable - allocated,
       spent: spent,
